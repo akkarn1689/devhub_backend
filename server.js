@@ -37,14 +37,25 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 //*******************************
 
+const corsOptions = {
+  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Authorization'],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
+
 //middlewares
-app.use(
-  cors({
-    credentials: true,
-    origin: `${process.env.FRONTEND_URL}`,
-    sameSite: "none",
-  })
-);
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: `${process.env.FRONTEND_URL}`,
+//     sameSite: "none",
+//   })
+// );
+app.use(cors(corsOptions));
 app.use(express.json({ limit: "4mb" }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
